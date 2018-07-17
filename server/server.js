@@ -15,21 +15,30 @@ io.on('connection', (socket) => {
   console.log('New user connected');
 
   //My custom event
-  socket.emit('newMessage' ,{
-      from: 'lenovo@yoga360.com',
-      text: 'Hello Dear User',
-      createdAt: '10:58',
+  socket.emit('newMessage', {
+      from: 'admin',
+      text:  'welcome to chat room',
+      createdAt: new Date().getTime(),
+  });
+
+  socket.broadcast.emit('newMessage', {
+      from: 'admin',
+      text:  'new user  joined',
+      createdAt: new Date().getTime(),
   });
 
   //Client to Server(Bidirectional)
     socket.on('createMessage', (newMessage) => {
       console.log('New message landed ', newMessage);
-      io.emit('newMessage', {
-          from: newMessage.from,
-          to: newMessage.to,
-          date: new Date().getDate(),
-      });
+
+        io.emit('newMessage', {
+            from: newMessage.from,
+            to: newMessage.to,
+            date: new Date().getTime(),
+        });
+
     });
+
   socket.on('disconnect', () => {
     console.log('User was disconnected');
   });
